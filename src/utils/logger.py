@@ -15,3 +15,4 @@ class Logger:
     @staticmethod
     def logBlue(message):
         print(f"\033[94m{message}\033[00m")
+

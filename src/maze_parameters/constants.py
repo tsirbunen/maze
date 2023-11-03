@@ -6,10 +6,10 @@ TYPE_QUESTION = f"What about the maze type? A maze with a single (s) or multiple
 TYPE_ERROR = f"\tThat's not an s nor an m!"
 WELCOME_TITLE = "WELCOME TO THE MAZE"
 WELCOME = [
-    "\t*********************************************************************************",
+    "\n\n\t*********************************************************************************",
     f"\t                             {WELCOME_TITLE}",
     "\t            the program for creating, playing and solving mazes",
-    "\t*********************************************************************************",
+    "\t*********************************************************************************\n",
 
 ]
 
@@ -48,3 +48,5 @@ INSTRUCTIONS = [
         "\tTyping 'q' enables you to quit this program at this point.\n"
     ]
 ]
+
+YOUR_INPUT_TITLE = "\n\tYOUR INPUT PLEASE:"
