@@ -1,5 +1,6 @@
 from src.utils.logger import Logger
 
+
 class InputGetter:
     def __init__(self):
         self.logger = Logger()

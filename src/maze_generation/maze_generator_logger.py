@@ -1,11 +1,18 @@
 from src.maze_parameters.maze_parameters import MazeParameters
 from src.maze_parameters.maze_type import MazeType
 from src.utils.logger import Logger
-from .constants import MAZE_GENERATION_INFO_TITLE, START_GENERATING, MAZE_DETAILS_INFO, SINGLE, MULTIPLE
-from .constants import TWISTING_INFO, MERGING_INFO, WALL_REMOVING_INFO, COMPLETED_INFO
 from .phase import Phase
 
 
+MAZE_GENERATION_INFO_TITLE =  "\n\tMAZE GENERATION:"
+MAZE_DETAILS_INFO = "\tGenerate a maze with size SIZE x SIZE and SOLUTIONS."
+SINGLE = "a single solution"
+MULTIPLE = "multiple solutions"
+START_GENERATING = "\tStarted generating the maze using the Twist & Merge algorithm..."
+TWISTING_INFO = "\t...working on the TWISTING phase..."
+MERGING_INFO = "\t...working on the MERGING phase..."
+WALL_REMOVING_INFO = "\t...working on the WALL REMOVAL phase (to enable multiple solutions)..."
+COMPLETED_INFO = "\t...and completed the job!"
 
 class MazeGeneratorLogger:
     def __init__(self, parameters: MazeParameters) -> None:
@@ -40,7 +47,6 @@ class MazeGeneratorLogger:
         for i in range(0, len(info)):
             self.logger.logYellow(info[i])
     
-
 
 
 

@@ -1,0 +1,12 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+    },
+    // "python.linting.pylintArgs": [
+    //     "--disable=missing-module-docstring",
+    //     "--disable=missing-class-docstring",
+    //     "--disable=missing-function-docstring"
+    // ]
+}
+

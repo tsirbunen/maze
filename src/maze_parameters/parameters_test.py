@@ -1,4 +1,4 @@
-from .parameters_querier import validate_maze_size, validate_maze_type
+from src.maze_parameters.parameters_querier import validate_maze_size, validate_maze_type
 from src.maze_parameters.log_instructions import log_instructions
 from src.maze_parameters.parameters_querier import ParametersQuerier
 from src.maze_parameters.constants import WELCOME_TITLE

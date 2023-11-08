@@ -1,6 +1,7 @@
+from dataclasses import dataclass
 from .maze_type import MazeType
 
+@dataclass
 class MazeParameters:
-    def __init__(self, size: int, maze_type: MazeType) -> None:
-        self.size = size
-        self.maze_type = maze_type
+    size: int
+    maze_type: MazeType

@@ -1,6 +1,5 @@
 import enum
 
-
 class Phase(enum.Enum):
     START = 1
     TWIST = 2
