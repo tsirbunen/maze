@@ -4,15 +4,18 @@ from src.utils.logger import Logger
 from .phase import Phase
 
 
-MAZE_GENERATION_INFO_TITLE =  "\n\tMAZE GENERATION:"
+MAZE_GENERATION_INFO_TITLE = "\n\tMAZE GENERATION:"
 MAZE_DETAILS_INFO = "\tGenerate a maze with size SIZE x SIZE and SOLUTIONS."
 SINGLE = "a single solution"
 MULTIPLE = "multiple solutions"
 START_GENERATING = "\tStarted generating the maze using the Twist & Merge algorithm..."
 TWISTING_INFO = "\t...working on the TWISTING phase..."
 MERGING_INFO = "\t...working on the MERGING phase..."
-WALL_REMOVING_INFO = "\t...working on the WALL REMOVAL phase (to enable multiple solutions)..."
+WALL_REMOVING_INFO = (
+    "\t...working on the WALL REMOVAL phase (to enable multiple solutions)..."
+)
 COMPLETED_INFO = "\t...and completed the job!"
+
 
 class MazeGeneratorLogger:
     def __init__(self, parameters: MazeParameters) -> None:
@@ -35,18 +38,15 @@ class MazeGeneratorLogger:
                 message = COMPLETED_INFO
             case _:
                 raise Exception("Not implemented!")
-        self.logger.logYellow(message)
-
+        self.logger.log_yellow(message)
 
     def log_start_generating_maze(self) -> None:
-        self.logger.logPink(MAZE_GENERATION_INFO_TITLE)
+        self.logger.log_pink(MAZE_GENERATION_INFO_TITLE)
         size = self.parameters.size
         solutions = SINGLE if self.parameters.maze_type == MazeType.SINGLE else MULTIPLE
-        maze_details = MAZE_DETAILS_INFO.replace("SIZE", f"{size}").replace("SOLUTIONS", solutions)
+        maze_details = MAZE_DETAILS_INFO.replace("SIZE", f"{size}").replace(
+            "SOLUTIONS", solutions
+        )
         info = [maze_details, START_GENERATING]
         for i in range(0, len(info)):
-            self.logger.logYellow(info[i])
-    
-
-
-
+            self.logger.log_yellow(info[i])

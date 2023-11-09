@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 
 from .observer import Observer
-from .event import Event
+from .event import AlgorithmEvent
+
 
 class Publisher(ABC):
     @abstractmethod
@@ -13,5 +14,5 @@ class Publisher(ABC):
         pass
 
     @abstractmethod
-    def dispatch_event(self, event: Event):
+    def dispatch_event(self, event: AlgorithmEvent):
         pass

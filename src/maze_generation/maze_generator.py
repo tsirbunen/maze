@@ -1,6 +1,6 @@
 import time
 from src.maze_parameters.maze_parameters import MazeParameters
-from src.events.event import Event
+from src.events.event import AlgorithmEvent
 from src.events.observer import Observer
 from src.events.publisher import Publisher
 from .merger import Merger
@@ -63,8 +63,8 @@ class MazeGenerator(Publisher):
     def detach_observer(self, observer: Observer):
         self._observers.remove(observer)
 
-    def dispatch_event(self, event: Event):
-        # Note: Wait for a little while so that the events enter the queue in the right order
+    def dispatch_event(self, event: AlgorithmEvent):
+        # Note: Wait for a little while so that the events enter the queue in the right order.
         time.sleep(0.01)
         for observer in self._observers:
             observer.on_event(event)

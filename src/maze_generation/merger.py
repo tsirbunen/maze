@@ -1,7 +1,7 @@
 import random
 from heapq import heappush, heappop
 from .basic_maze_operations import BasicMazeOperations
-from src.events.event import EventType, Event
+from src.events.event import AlgorithmEvent, EventType
 
 
 class Merger(BasicMazeOperations):
@@ -25,7 +25,7 @@ class Merger(BasicMazeOperations):
             self._set_next_focus_group_label()
             self._arrange_nodes_of_focus_group_into_random_order()
             self._connect_one_focus_group_node_to_node_in_other_group_if_possible()
-        self.dispatch_event(Event(EventType.PHASE_COMPLETED, None, None))
+        self.dispatch_event(AlgorithmEvent(EventType.PHASE_COMPLETED, []))
 
     def _arrange_group_labels_into_random_order(self):
         for label in range(0, len(self.node_groups)):
@@ -48,11 +48,7 @@ class Merger(BasicMazeOperations):
         while len(self.focus_group_nodes) > 0:
             self.focus_node = heappop(self.focus_group_nodes)[1]
             self.dispatch_event(
-                Event(
-                    event_type=EventType.MERGE_FOCUS,
-                    from_node=self.focus_node,
-                    to_node=None,
-                )
+                AlgorithmEvent(EventType.TEMPORARY_ROOT, [self.focus_node])
             )
             neighbor_nodes = self._get_unconnected_neighbors(self.focus_node)
             if len(neighbor_nodes) > 0:
@@ -83,13 +79,8 @@ class Merger(BasicMazeOperations):
     def _create_connections_between_nodes(self, from_node, to_node):
         self.connections[from_node].append(to_node)
         self.connections[to_node].append(from_node)
-        self.dispatch_event(
-            Event(
-                event_type=EventType.MERGE_CONNECT,
-                from_node=from_node,
-                to_node=to_node,
-            )
-        )
+        self.dispatch_event(AlgorithmEvent(EventType.TEMPORARY_NEIGHBOR, [to_node]))
+        self.dispatch_event(AlgorithmEvent(EventType.REMOVE_WALL, [from_node, to_node]))
 
     def _relabel_nodes_of_smaller_group(self, current_label, neighbor_label):
         (new_label, label_to_relabel) = self._get_smaller_group_to_relabel(
@@ -98,13 +89,6 @@ class Merger(BasicMazeOperations):
         for node in self.node_groups[label_to_relabel]:
             self.node_labels[node] = new_label
             self.node_groups[new_label].append(node)
-            # self.dispatch_event(
-            #     Event(
-            #         EventType.MERGE_RELABEL,
-            #         node,
-            #         None,
-            #     )
-            # )
 
     def _get_smaller_group_to_relabel(self, current_label, neighbor_label):
         should_relabel_neighbor = len(self.node_groups[neighbor_label]) < len(

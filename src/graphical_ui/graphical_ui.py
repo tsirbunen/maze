@@ -1,7 +1,7 @@
 import time
 from maze_activity import MazeActivity
 from src.events.event_queue import EventQueue
-from src.graphical_ui.event_processor import EventProcessor
+from src.graphical_ui.events_processor import EventsProcessor
 
 # from src.maze_generation.maze_generator import MazeGenerator
 # from src.maze_parameters.maze_parameters import MazeParameters
@@ -19,14 +19,7 @@ class GraphicalUI:
     """GraphicalUI is responsible for ORCHESTRATING all maze related things."""
 
     def __init__(
-        self,
-        maze_size: int,
-        event_queue: EventQueue,
-        perform_activity
-        # self,
-        # maze_size: int,
-        # event_queue: EventHandler,
-        # perform_activity,
+        self, maze_size: int, event_queue: EventQueue, perform_activity
     ) -> None:
         self._perform_activity = perform_activity
         self.screen_provider = ScreenProvider()
@@ -37,12 +30,11 @@ class GraphicalUI:
         self._setup_border_walls_and_status_stamps(maze_size)
 
         # parameters = MazeParameters(4, MazeType.SINGLE)
-        self.event_processor = EventProcessor(
+        self.event_processor = EventsProcessor(
             event_queue,
             self.status_stamps,
             self.walls,
         )
-        # event_queue.process()
         self._setup_event_detection()
         # maze_generator.generate()
         # maze_connection = maze_generator.get_finished_maze()

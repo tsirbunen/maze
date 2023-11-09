@@ -1,5 +1,6 @@
 import random
-from src.events.event import Event, EventType
+
+# from src.events.event import Event, EventType
 
 from src.maze_parameters.maze_type import MazeType
 from .maze_generator_logger import MazeGeneratorLogger

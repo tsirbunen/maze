@@ -36,7 +36,7 @@ class StatusStamps:
         self.status_stamps[node].hide()
         self._update_screen()
 
-    def hide_all_stamps(self):
+    def hide_all(self):
         """Makes the stamp of a node invisible on screen."""
         for stamp in self.status_stamps:
             stamp.hide()

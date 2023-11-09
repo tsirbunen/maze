@@ -10,7 +10,7 @@ class InputGetter:
             answer = self.get_input(question)
             if validate_fn(answer):
                 return answer
-            self.logger.logYellow(error)
+            self.logger.log_yellow(error)
 
     # Method cannot be made private because we want to mock it in tests!
     def get_input(self, question):

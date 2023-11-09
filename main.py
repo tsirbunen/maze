@@ -11,28 +11,8 @@ from src.maze_generation.maze_generator import MazeGenerator
 from src.graphical_ui.graphical_ui import GraphicalUI
 
 
-# event_queue = EventQueue()
-
-
-# # # log_instructions()
-# # parameters = ParametersQuerier().get_parameters()
-# parameters = MazeParameters(3, MazeType.SINGLE)
-# maze_generator = MazeGenerator(parameters)
-# # maze_generator.attach_observer(event_queue)
-# maze_generator.generate()
-# graphical_ui = GraphicalUI(parameters.size, event_queue)
-
-# maze_generator.attach_observer(graphical_ui)
-# maze_connection = maze_generator.get_finished_maze()
-
-
-# while not event_queue.is_empty():
-#     event = event_queue.next_event()
-#     # print(event)
-#     print(f"Event: {event.event_type} {event.to_node} {event.from_node}")
 class MazeProgram:
     def __init__(self) -> None:
-        # self.event_queue = EventQueue()
         self.event_queue = EventQueue()
         self.event_observer = QueueObserver(self.event_queue)
 

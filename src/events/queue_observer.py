@@ -1,7 +1,7 @@
-from src.events.event import Event
-from src.events.event_queue import EventQueue
+from .event import AlgorithmEvent
+from .event_queue import EventQueue
 
-from src.events.observer import Observer
+from .observer import Observer
 
 QUEUE_MAX_SIZE = 10
 
@@ -20,7 +20,7 @@ class QueueObserver(Observer):
         """Tells whether there are any events in the queue at the moment"""
         return self._queue.empty()
 
-    def next_event(self) -> Event | None:
+    def next_event(self) -> AlgorithmEvent | None:
         """Gives the next event in queue if there are any"""
         if not self._queue.empty():
             return self._queue.get()

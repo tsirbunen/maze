@@ -1,5 +1,5 @@
 from queue import Queue
-from src.events.event import Event
+from src.events.event import AlgorithmEvent
 
 
 class EventQueue:
@@ -17,16 +17,16 @@ class EventQueue:
         """Returns the singleton instance of the one and only queue with events"""
         return self._instance
 
-    def enqueue(self, event):
+    def enqueue(self, event: AlgorithmEvent):
         """Add new event to the que"""
-        print(f"\033[94m\t {event.event_type} {event.to_node} {event.from_node}")
+        print(f"\033[94m\t {event.__class__}")
         self._queue.put(event, block=True)
 
     def is_empty(self) -> bool:
         """Tells whether there are any events in the event queue (at the moment of querying)"""
         return self._queue.empty()
 
-    def next_event(self) -> Event | None:
+    def next_event(self) -> AlgorithmEvent | None:
         """Gives the next event in the event queue if there are any (at the moment or querying)"""
         if not self._queue.empty():
             return self._queue.get()

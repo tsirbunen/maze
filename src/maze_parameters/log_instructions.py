@@ -3,15 +3,15 @@ from .constants import WELCOME, INSTRUCTIONS, YOUR_INPUT_TITLE
 
 
 def log_instructions():
+    """Log use instructions to the console."""
     for line in WELCOME:
-        Logger.logPink(line)
+        Logger.log_pink(line)
 
     for line_group in INSTRUCTIONS:
-        for line in range(len(line_group)):
-            to_print = line_group[line]
-            if line == 0:
-                Logger.logPink(to_print)
+        for index, line in enumerate(line_group):
+            if index == 0:
+                Logger.log_pink(line)
             else:
-                Logger.logYellow(to_print)
+                Logger.log_yellow(line)
 
-    Logger.logPink(YOUR_INPUT_TITLE)
+    Logger.log_pink(YOUR_INPUT_TITLE)
