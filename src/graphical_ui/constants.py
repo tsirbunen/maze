@@ -16,3 +16,4 @@ BLINK_COLOR = "gold"
 # "dodger blue"
 # "green yellow"
 # "medium sea green"
+SCREEN_SIZE = 1_000

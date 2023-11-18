@@ -3,6 +3,8 @@ from .basic_maze_operations import BasicMazeOperations
 
 
 class Twister(BasicMazeOperations):
+    """Responsible for performing the twisting phase of the Twist & merge algorithm."""
+
     def __init__(
         self,
         parameters,
@@ -22,6 +24,7 @@ class Twister(BasicMazeOperations):
         self.connections: [[int]] = variables[4]
 
     def perform(self) -> None:
+        """Performs the actual twisting phase of the Twist & merge algorithm."""
         while self._nodes_remain_to_be_labeled():
             self.node = self.unlabeled_nodes[self.index]
             if self._node_has_not_been_labeled_yet(self.node):
@@ -95,4 +98,5 @@ class Twister(BasicMazeOperations):
         return len(set(rows)) == 1 or len(set(columns)) == 1
 
     def get_result(self) -> ([int], [[int]], [[int]]):
+        """Returns the variables that have undergone the twisting-related changes."""
         return (self.node_labels, self.node_groups, self.connections)

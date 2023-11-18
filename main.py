@@ -1,6 +1,6 @@
-from maze_activity import MazeActivity
 from src.events.queue_observer import QueueObserver
 from src.events.event_queue import EventQueue
+from src.graphical_ui.maze_activity import MazeActivity
 
 
 from src.maze_parameters.maze_parameters import MazeParameters
@@ -9,36 +9,59 @@ from src.maze_parameters.parameters_querier import ParametersQuerier
 from src.maze_parameters.log_instructions import log_instructions
 from src.maze_generation.maze_generator import MazeGenerator
 from src.graphical_ui.graphical_ui import GraphicalUI
+from src.maze_solving.maze_solver import MazeSolver
 
 
 class MazeProgram:
     def __init__(self) -> None:
         self.event_queue = EventQueue()
         self.event_observer = QueueObserver(self.event_queue)
+        self.graphical_ui = None
+        self.maze_generator = None
+        self.maze_solver = None
+        self.maze = None
 
     def run(self):
         # log_instructions()
         # querier = ParametersQuerier()
         # parameters = querier.get_parameters()
-        parameters = MazeParameters(3, MazeType.SINGLE)
+        parameters = MazeParameters(4, MazeType.SINGLE)
         self.maze_generator = MazeGenerator(parameters)
 
         self.maze_generator.attach_observer(self.event_observer)
 
-        graphical_ui = GraphicalUI(
+        self.graphical_ui = GraphicalUI(
             parameters.size,
             self.event_queue,
             self._perform_activity,
         )
 
-    def _perform_activity(self, activity: MazeActivity):
+    def _perform_activity(self, activity: MazeActivity, parameters):
+        print(f"Performing activity {activity}")
         if activity == MazeActivity.GENERATE:
-            self._generate_maze()
+            self._generate_maze(with_event_dispatching=parameters)
+        elif activity == MazeActivity.GET_MAZE:
+            maze = self._get_generated_maze()
+            self.maze = maze
+            return maze
+        elif activity == MazeActivity.SOLVE_WALL_FOLLOWER:
+            self._setup_solver()
+            self.maze_solver.solve_with_wall_follower()
         else:
             raise ValueError("Unknown activity")
 
-    def _generate_maze(self):
-        self.maze_generator.generate()
+    def _generate_maze(self, with_event_dispatching):
+        self.maze_generator.generate(with_event_dispatching)
+        # maze = self.maze_generator.get_finished_maze()
+        # self.graphical_ui.set_maze(maze)
+
+    def _get_generated_maze(self):
+        return self.maze_generator.get_finished_maze()
+
+    def _setup_solver(self):
+        if self.maze_solver is None:
+            self.maze_solver = MazeSolver(self.maze)
+            self.maze_solver.attach_observer(self.event_observer)
 
 
 maze_program = MazeProgram()

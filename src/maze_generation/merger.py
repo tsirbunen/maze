@@ -5,6 +5,8 @@ from src.events.event import AlgorithmEvent, EventType
 
 
 class Merger(BasicMazeOperations):
+    """Responsible for performing the merging phase of the Twist & merge algorithm."""
+
     def __init__(
         self, parameters, dispatch_event, twisted_variables: ([int], [[int]], [[int]])
     ):
@@ -20,6 +22,7 @@ class Merger(BasicMazeOperations):
         self.focus_node = None
 
     def perform(self):
+        """Performs the actual merging phase of the Twist & merge algorithm."""
         self._arrange_group_labels_into_random_order()
         while self.multiple_groups_remain:
             self._set_next_focus_group_label()
@@ -105,4 +108,5 @@ class Merger(BasicMazeOperations):
                 self.multiple_groups_remain = False
 
     def get_result(self) -> [[int]]:
+        """Returns the connections between nodes as a graph."""
         return self.connections

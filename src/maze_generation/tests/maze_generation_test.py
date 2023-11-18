@@ -213,7 +213,7 @@ def test_maze_generator_produces_valid_single_solution_mazes():
         # the real function waits in between events for a little while and that
         # would cause the tests to run too slowly.
         maze_generator.dispatch_event = helpers.dispatch_event
-        maze_generator.generate()
+        maze_generator.generate(True)
         connections = maze_generator.get_finished_maze()
         assert_generated_maze_has_correct_dimensions(size, connections)
         assert_every_node_in_generated_maze_is_connected_to_other_nodes(connections)

@@ -71,6 +71,8 @@ class MazeWalls:
         raise ValueError("No such wall exists")
 
     def _blink_wall(self, wall):
+        if wall is None:
+            return
         wall.draw_wall_in_blink_color()
         self._update_screen()
         time.sleep(0.5)
@@ -79,4 +81,6 @@ class MazeWalls:
         self.walls_of_all_nodes[node][node_wall_position] = None
 
     def _clear_wall_from_screen(self, wall_to_remove):
+        if wall_to_remove is None:
+            return
         wall_to_remove.clear()

@@ -1,9 +1,10 @@
 import turtle
 from turtle import Screen
 
+from .constants import SCREEN_SIZE
+
 BACKGROUND_COLOR = "black"
 GAME_TITLE = "maze game"
-SCREEN_SIZE = 1_000
 
 
 class ScreenProvider:
@@ -26,9 +27,14 @@ class ScreenProvider:
         # turtle.listen()  # pylint: disable=no-member
 
     def listen_to_keystrokes(self):
-        # self._screen.onkey(generate_maze, "g")
         turtle.listen()  # pylint: disable=no-member
 
     def set_exit_on_click(self):
         """Prevents the screen from closing prematurely"""
         self._screen.exitonclick()
+
+    def on_timer(self, action, delay):
+        self._screen.ontimer(action, delay)
+
+    def quit_program(self):
+        turtle.bye()

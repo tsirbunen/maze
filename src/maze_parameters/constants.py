@@ -1,8 +1,12 @@
 MIN_SIZE = 2
-MAX_SIZE = 50
+MAX_SIZE = 20
 SIZE_QUESTION = f"So, what size of maze would you like ({MIN_SIZE}...{MAX_SIZE})? "
-SIZE_ERROR = f"\tHmm. That's not quite between {MIN_SIZE} and {MAX_SIZE}, is it? Try again!"
-TYPE_QUESTION = f"What about the maze type? A maze with a single (s) or multiple (m) solutions? "
+SIZE_ERROR = (
+    f"\tHmm. That's not quite between {MIN_SIZE} and {MAX_SIZE}, is it? Try again!"
+)
+TYPE_QUESTION = (
+    f"What about the maze type? A maze with a single (s) or multiple (m) solutions? "
+)
 TYPE_ERROR = f"\tThat's not an s nor an m!"
 WELCOME_TITLE = "WELCOME TO THE MAZE"
 WELCOME = [
@@ -10,7 +14,6 @@ WELCOME = [
     f"\t                             {WELCOME_TITLE}",
     "\t            the program for creating, playing and solving mazes",
     "\t*********************************************************************************\n",
-
 ]
 
 INSTRUCTIONS = [
@@ -20,7 +23,7 @@ INSTRUCTIONS = [
         f"\tThe edge size N of the maze (N x N) can have any value in range {MIN_SIZE}...{MAX_SIZE}.",
         "\tThe type of the maze refers to the number of solutions the maze has:",
         "\t\t- a single solution (i.e. only one path from start to finish exists)",
-        "\t\t- multiple solutions (i.e. many paths with varying lengths exist"
+        "\t\t- multiple solutions (i.e. many paths with varying lengths exist",
     ],
     [
         "\n\tMAZE GENERATION:",
@@ -45,8 +48,8 @@ INSTRUCTIONS = [
     [
         "\n\tGENERAL:",
         "\tPlease note that the GUI will only answer to keystrokes.",
-        "\tTyping 'q' enables you to quit this program at this point.\n"
-    ]
+        "\tTyping 'q' enables you to quit this program at this point.\n",
+    ],
 ]
 
 YOUR_INPUT_TITLE = "\n\tYOUR INPUT PLEASE:"

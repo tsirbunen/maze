@@ -3,7 +3,11 @@ from turtle import Turtle
 from .stamp_mode import StampMode
 from .point import Point
 
-STAMP_COLORS = {StampMode.TWISTED: "dodger blue"}
+STAMP_COLORS = {
+    StampMode.GENERATE_MAZE: "dodger blue",
+    StampMode.PLAYER_PATH: "green yellow",
+    StampMode.GOAL: "medium sea green",
+}
 SHAPE = "circle"
 SHAPE_SIZE = 1
 

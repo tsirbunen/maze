@@ -5,12 +5,13 @@ from dataclasses import dataclass
 class EventType(enum.Enum):
     """Maze generation or solving algorithms or its phase."""
 
-    ALGORITHM_CHANGE = 1
+    MAZE_GENERATION_COMPLETED = 1
     PERMANENT_NODE = 2
     REMOVE_WALL = 3
     TEMPORARY_ROOT = 4
     TEMPORARY_NEIGHBOR = 5
     PHASE_COMPLETED = 6
+    SOLVING_COMPLETED = 7
 
 
 @dataclass

@@ -2,5 +2,6 @@ import enum
 
 
 class StampMode(enum.Enum):
-    TWISTED = 1
-    # BELOW = 2
+    GENERATE_MAZE = 1
+    PLAYER_PATH = 2
+    GOAL = 3

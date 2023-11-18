@@ -13,7 +13,7 @@ class StatusStamps:
         self._update_screen = update_screen
         self.status_stamps = []
 
-    def draw_status_stamps(self):
+    def create_status_stamps(self):
         """Draws a stamp to each node in the maze; stamps are initially hidden."""
         for row in range(0, self.maze_size):
             for column in range(0, self.maze_size):
@@ -24,7 +24,7 @@ class StatusStamps:
     def _create_stamp_for_one_node(self, row, column):
         x = self.maze_origo.x + (column + 1 / 2) * ELEMENT_SIZE
         y = self.maze_origo.y - (row + 1 / 2) * ELEMENT_SIZE
-        return Stamp(Point(x, y), StampMode.TWISTED)
+        return Stamp(Point(x, y), StampMode.GENERATE_MAZE)
 
     def show_stamp(self, node):
         """Makes the stamp of a node visible on screen."""

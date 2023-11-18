@@ -1,6 +1,6 @@
 import time
 from src.maze_parameters.maze_parameters import MazeParameters
-from src.events.event import AlgorithmEvent
+from src.events.event import AlgorithmEvent, EventType
 from src.events.observer import Observer
 from src.events.publisher import Publisher
 from .merger import Merger
@@ -27,9 +27,11 @@ class MazeGenerator(Publisher):
         self._observers: Observer = []
         self._is_completed = False
         self._result = None
+        self._with_event_dispatching = False
 
-    def generate(self):
+    def generate(self, with_event_dispatching: bool):
         """Generate the maze with the given parameters."""
+        self._with_event_dispatching = with_event_dispatching
         self._initialize()
         self._perform(Phase.TWIST, Twister)
         self._perform(Phase.MERGE, Merger)
@@ -50,6 +52,8 @@ class MazeGenerator(Publisher):
     def _complete_maze_generation(self):
         self._logger.log(Phase.COMPLETE)
         self._is_completed = True
+        print(self._result)
+        self.dispatch_event(AlgorithmEvent(EventType.MAZE_GENERATION_COMPLETED, None))
 
     def get_finished_maze(self):
         """Returns the maze as a graph of connections between nodes ([[int]]) if completed."""
@@ -64,7 +68,9 @@ class MazeGenerator(Publisher):
         self._observers.remove(observer)
 
     def dispatch_event(self, event: AlgorithmEvent):
+        if not self._with_event_dispatching:
+            return
         # Note: Wait for a little while so that the events enter the queue in the right order.
-        time.sleep(0.01)
+        time.sleep(0.001)
         for observer in self._observers:
             observer.on_event(event)
