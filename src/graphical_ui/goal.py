@@ -18,7 +18,6 @@ class Goal(Stamp):
         y = origo.y - (maze_size - 1 / 2) * ELEMENT_SIZE
         goal_location = Point(x, y)
         super().__init__(goal_location, StampMode.GOAL)
-        # self.show()
 
     def play(self):
         """Makes the goal visible."""

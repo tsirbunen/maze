@@ -9,3 +9,4 @@ class StampActivity(enum.Enum):
     HIDE_ALL = 3
     SHOW_PATH_STAMP = 4
     BLINK_STAMP = 5
+    RESET_ALL = 6

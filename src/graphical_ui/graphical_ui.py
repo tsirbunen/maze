@@ -25,6 +25,7 @@ class GraphicalUI:
         ]
         self.toolkit = None
         self._build_toolkit(maze_size, perform_activity)
+        self.handler = None
         self._perform_next_step()
         self.maze_elements_controller.set_exit_on_click()
 
@@ -45,6 +46,6 @@ class GraphicalUI:
         if maze is not None:
             self.toolkit.maze = maze
         if len(self._step_handlers) > 0:
-            handler = self._step_handlers.pop(0)
-            handler = handler(self.toolkit)
-            handler.handle()
+            self.handler = self._step_handlers.pop(0)
+            self.handler = self.handler(self.toolkit)
+        self.handler.handle()

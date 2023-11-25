@@ -1,10 +1,16 @@
 # THE MAZE
 
-**THE MAZE** is a program that creates mazes, allows you to try to solve them,
+**THE MAZE** is a program that creates mazes, allows you to try to solve them, and
 solves the mazes using different algorithms. Optionally you can choose to view the
 maze generation and solving processes live in a GUI.
 
 ## RUNNING THE PROGRAM
+
+In root folder, run
+
+`python3 main.py`
+
+OR alternatively:
 
 - Download the [PyCharm IDE](https://www.jetbrains.com/pycharm/download/#section=mac) if you don't have it already.
 - Download this repository.
@@ -16,16 +22,15 @@ maze generation and solving processes live in a GUI.
 - A console program will start and print out the use instructions.
 - Answer the questions asked by the console.
 - A GUI will open up. Follow the instructions within the GUI.
-- Have fun!
-
-OR alternatively, in root folder, run `python3 main.py`
+- DO NOT CLICK WITH A MOUSE (even outside the GUI) AT ANY POINT!
+- Be patient and have fun!
 
 ![how_to_run](images/how_to_run.png)
 
 **NOTE:**
 If you get the below warning (and the GUI does not open up properly),
 switch to using python version 3.10.2 as the interpreter in PyCharm.
-This python version should enable the Turtle graphics (that the graphical UI is based on).
+This python version should enable the Turtle graphics (needed by the graphical UI).
 
 ```
 DEPRECATION WARNING: The system version of Tk is deprecated and may be removed in a future release.
@@ -34,16 +39,17 @@ Please don't rely on it. Set TK_SILENCE_DEPRECATION=1 to suppress this warning.
 
 ## RUNNING THE TESTS
 
-Please note that running the tests takes some time (as we wait for the events to be dispatched properly)!
-Files containing tests have been placed into the same folder with the code that they test.
-To run all tests, open a separate Terminal (macOS) at root level and run
-`python3 -m pytest`
-(If you wish to see the print logs, add -s to the command).
-To run a single test file, run (change the folder and file names as necessary)
-`python3 -m pytest src/maze_parameters/parameters_test.py`
-To get test coverage data, run
-`coverage run -m pytest`
-and then print the test coverage data to console with
+- Please note that running the tests takes some time (as we wait for the events to be dispatched properly)!
+- Files containing tests have been placed near the code that they test.
+- To run all tests, open a separate Terminal (macOS) at root level and run
+  `python3 -m pytest`
+  (If you wish to see the print logs, add -s to the command).
+- To run a single test file, run (change the folder and file names as necessary)
+  `python3 -m pytest src/maze_parameters/parameters_test.py`
+- To get test coverage data, run
+  `coverage run -m pytest`
+  and then print the test coverage data to console with
+- Currently there are no tests for the GUI graphics (only the console and algorithms are tested).
 
 ```
 coverage report -m
@@ -69,11 +75,10 @@ How do you perform the generation by Twist & merge?
 
 2. Second you perform the "Merge". Select one group of nodes in random. Go through all members in this group in random order. For each member, check if there are unconnected neighbors with different labels that could be connected. If so, create a connection between the member under study and a random neighbor. Change the label of each member of the new group to be the same as is the label of the originally selected group. Go through all groups, so that in the end all nodes belong to one single group.
 
-## CODE DESIGN
+### Maze solving
 
-To enable testing and using private methods, code has been split to very small classes.
+Currently the following maze solving algorithms are available:
 
-### Maze presentation
-
-I chose to use the **adjacency list** as the data structure to represent mazes throughout the program code.
-I did not select a matrix with Xs as walls and Os as rooms because I wanted to have thin-walled mazes.
+1. Wall follower
+2. Dead End Filler
+3. Dijkstra

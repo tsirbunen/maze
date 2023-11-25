@@ -62,3 +62,9 @@ class StatusStamps:
         stamp.change_mode(StampMode.GENERATE_MAZE)
         stamp.hide()
         self._update_screen()
+
+    def reset_all_stamp_colors(self):
+        """Resets all stamps to their default color."""
+        for stamp in self.status_stamps:
+            stamp.change_mode(StampMode.GENERATE_MAZE)
+        self._update_screen()

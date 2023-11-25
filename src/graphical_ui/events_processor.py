@@ -41,7 +41,7 @@ class EventsProcessor:
             EventType.REMOVE_WALL: self._remove_wall,
             EventType.TEMPORARY_ROOT: self._set_temporary_root_node,
             EventType.TEMPORARY_NEIGHBOR: self._add_temporary_neighbor_node,
-            EventType.SOLVING_COMPLETED: self.stop_processing,
+            EventType.SOLVING_COMPLETED: self._on_solving_completed,
             EventType.PATH_NODE: self._show_path_node,
             EventType.BLINK_NODE: self._blink_node,
         }
@@ -67,18 +67,19 @@ class EventsProcessor:
     @threaded
     def process(self):
         """Translates maze algorithm events into animations on the screen."""
-        # print("\033[95mProcess events...")
+        self._reset_stamp_colors()
         if self._should_stop_processing:
             self._should_stop_processing = False
         while not self._should_stop_processing:
-            print("\033[95mCheck for new events...")
             time.sleep(self._sleep_time)
             if not self._queue.is_empty():
                 event = self._queue.next_event()
-                print(f"\033[95mProcess: {event.algorithm_event_type} - {event.nodes}")
                 action = self.available_actions[event.algorithm_event_type]
                 action(event.nodes)
         self.stop_processing()
+
+    def _reset_stamp_colors(self):
+        self._handle_stamp_action(StampActivity.RESET_ALL, None)
 
     def _hide_all_stamps(self, _):
         self._handle_stamp_action(StampActivity.HIDE_ALL, None)
@@ -111,6 +112,11 @@ class EventsProcessor:
     def _blink_node(self, nodes):
         self._handle_stamp_action(StampActivity.BLINK_STAMP, nodes[0])
         self._handle_stamp_action(StampActivity.SHOW_STAMP, nodes[0])
+
+    def _on_solving_completed(self, _):
+        time.sleep(2)
+        self.stop_processing()
+        self.perform_next_step()
 
     def _on_maze_completed(self, maze_connections):
         if self._with_live_viewing:

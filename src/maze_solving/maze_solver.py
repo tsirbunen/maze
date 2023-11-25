@@ -35,7 +35,6 @@ class MazeSolver(Publisher):
         self._solve(Dijkstra)
 
     def _solve(self, selected_solver):
-        print("SOLVE")
         maze_copy = self._copy_maze()
         solver = selected_solver(maze_copy, self.dispatch_event)
         solver.solve()
@@ -50,7 +49,6 @@ class MazeSolver(Publisher):
         self._observers.remove(observer)
 
     def dispatch_event(self, event: AlgorithmEvent):
-        print(f"DISPATCH {event.nodes}")
         # Note: Wait for a little while so that the events enter the queue in the right order.
         time.sleep(0.001)
         for observer in self._observers:

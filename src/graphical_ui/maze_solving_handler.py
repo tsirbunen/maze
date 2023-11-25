@@ -52,7 +52,6 @@ class MazeSolvingHandler:
         self._solve_maze(MazeActivity.SOLVE_DIJKSTRA, DIJKSTRA)
 
     def _solve_maze(self, maze_activity, specific_info):
-        print("_event_processor")
         self._event_processor.process()
         self._perform_activity(maze_activity, True)
         self._show_algorithm_instructions(specific_info)

@@ -53,6 +53,8 @@ class MazeElementsController:
                 self._status_stamps.show_path_node(params)
             case StampActivity.BLINK_STAMP:
                 self._status_stamps.blink_stamp(params)
+            case StampActivity.RESET_ALL:
+                self._status_stamps.reset_all_stamp_colors()
             case _:
                 raise ValueError(f"Unknown stamp action: {action}")
 
