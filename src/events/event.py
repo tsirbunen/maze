@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 
 class EventType(enum.Enum):
-    """Maze generation or solving algorithms or its phase."""
+    """Type of event related to maze generation, maze solving algorithm, or its phase."""
 
     MAZE_GENERATION_COMPLETED = 1
     PERMANENT_NODE = 2
@@ -12,11 +12,13 @@ class EventType(enum.Enum):
     TEMPORARY_NEIGHBOR = 5
     PHASE_COMPLETED = 6
     SOLVING_COMPLETED = 7
+    PATH_NODE = 8
+    BLINK_NODE = 9
 
 
 @dataclass
 class AlgorithmEvent:
-    """Holds information on maze algorithm generation or solving algorithm progress."""
+    """Type of event and nodes related to the event of maze generation or solving."""
 
     algorithm_event_type: EventType
     nodes: [int]

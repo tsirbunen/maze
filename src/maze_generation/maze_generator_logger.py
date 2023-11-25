@@ -15,14 +15,20 @@ WALL_REMOVING_INFO = (
     "\t...working on the WALL REMOVAL phase (to enable multiple solutions)..."
 )
 COMPLETED_INFO = "\t...and completed the job!"
+MULTIPLE_SOLUTIONS_NOT_IMPLEMENTED = (
+    "\tMultiple solutions not implemented yet! Resorting to single solution."
+)
 
 
 class MazeGeneratorLogger:
+    """Handles logging maze generation related information to console."""
+
     def __init__(self, parameters: MazeParameters) -> None:
         self.parameters = parameters
         self.logger = Logger()
 
     def log(self, info: Phase) -> None:
+        """Logs maze generation phase-related information to console."""
         message = ""
         match info:
             case Phase.START:
@@ -37,10 +43,11 @@ class MazeGeneratorLogger:
             case Phase.COMPLETE:
                 message = COMPLETED_INFO
             case _:
-                raise Exception("Not implemented!")
+                raise ValueError(f"{info} not implemented!")
         self.logger.log_yellow(message)
 
     def log_start_generating_maze(self) -> None:
+        """Logs information about the maze to be generated to console."""
         self.logger.log_pink(MAZE_GENERATION_INFO_TITLE)
         size = self.parameters.size
         solutions = SINGLE if self.parameters.maze_type == MazeType.SINGLE else MULTIPLE
@@ -48,5 +55,9 @@ class MazeGeneratorLogger:
             "SOLUTIONS", solutions
         )
         info = [maze_details, START_GENERATING]
-        for i in range(0, len(info)):
-            self.logger.log_yellow(info[i])
+        for info, _ in enumerate(info):
+            self.logger.log_yellow(info)
+
+    def log_multiple_solutions_not_implemented(self) -> None:
+        """Warns that multiple solutions are not implemented yet."""
+        self.logger.log_yellow(MULTIPLE_SOLUTIONS_NOT_IMPLEMENTED)

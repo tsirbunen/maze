@@ -1,11 +1,14 @@
+import time
 from .stamp import Stamp
 from .stamp_mode import StampMode
 from .constants import ELEMENT_SIZE
 from .point import Point
 
+BLINK_COLOR = "orange"
+
 
 class StatusStamps:
-    """Shows the progress of maze algorithms by drawing dots on the screen."""
+    """Shows the progress of an algorithm by drawing various dots on the screen."""
 
     def __init__(self, origo: Point, maze_size: int, update_screen):
         self.maze_origo = origo
@@ -42,8 +45,20 @@ class StatusStamps:
             stamp.hide()
         self._update_screen()
 
-    # def show_in_color(self, node, color):
-    #     status_node = self.status_stamps[node]
-    #     node.color = color
-    #     node.show()
-    #     self._update_screen()
+    def show_path_node(self, node):
+        """Shows a node of a solution path."""
+        stamp = self.status_stamps[node]
+        stamp.show()
+        stamp.change_mode(StampMode.SOLUTION_PATH)
+        self._update_screen()
+
+    def blink_stamp(self, node):
+        """Makes the stamp blink on screen."""
+        stamp = self.status_stamps[node]
+        stamp.show()
+        stamp.change_mode(StampMode.BLINK)
+        self._update_screen()
+        time.sleep(0.5)
+        stamp.change_mode(StampMode.GENERATE_MAZE)
+        stamp.hide()
+        self._update_screen()

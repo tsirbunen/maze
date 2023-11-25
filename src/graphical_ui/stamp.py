@@ -7,13 +7,15 @@ STAMP_COLORS = {
     StampMode.GENERATE_MAZE: "dodger blue",
     StampMode.PLAYER_PATH: "green yellow",
     StampMode.GOAL: "medium sea green",
+    StampMode.SOLUTION_PATH: "purple",
+    StampMode.BLINK: "orange",
 }
 SHAPE = "circle"
 SHAPE_SIZE = 1
 
 
 class Stamp(Turtle):
-    """Draws a circular stamp inside a maze node; stamp color can be controlled by its mode"""
+    """Draws a circular stamp inside a maze node; stamp color can be controlled by its mode."""
 
     def __init__(self, point: Point, mode: StampMode):
         super().__init__()

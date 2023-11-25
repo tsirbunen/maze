@@ -1,7 +1,7 @@
 import random
 from heapq import heappush, heappop
-from .basic_maze_operations import BasicMazeOperations
 from src.events.event import AlgorithmEvent, EventType
+from .basic_maze_operations import BasicMazeOperations
 
 
 class Merger(BasicMazeOperations):
@@ -108,5 +108,5 @@ class Merger(BasicMazeOperations):
                 self.multiple_groups_remain = False
 
     def get_result(self) -> [[int]]:
-        """Returns the connections between nodes as a graph."""
+        """Returns the connections between nodes in the maze as a graph."""
         return self.connections

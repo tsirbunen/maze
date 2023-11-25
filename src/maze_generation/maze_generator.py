@@ -3,10 +3,10 @@ from src.maze_parameters.maze_parameters import MazeParameters
 from src.events.event import AlgorithmEvent, EventType
 from src.events.observer import Observer
 from src.events.publisher import Publisher
+from src.maze_parameters.maze_type import MazeType
 from .merger import Merger
 from .twister import Twister
 from .variables_initializer import VariablesInitializer
-from .wall_remover import WallRemover
 from .maze_generator_logger import MazeGeneratorLogger
 from .phase import Phase
 
@@ -28,6 +28,7 @@ class MazeGenerator(Publisher):
         self._is_completed = False
         self._result = None
         self._with_event_dispatching = False
+        self._check_parameters()
 
     def generate(self, with_event_dispatching: bool):
         """Generate the maze with the given parameters."""
@@ -35,7 +36,6 @@ class MazeGenerator(Publisher):
         self._initialize()
         self._perform(Phase.TWIST, Twister)
         self._perform(Phase.MERGE, Merger)
-        self._perform(Phase.WALL_REMOVAL, WallRemover)
         self._complete_maze_generation()
 
     def _initialize(self):
@@ -52,7 +52,6 @@ class MazeGenerator(Publisher):
     def _complete_maze_generation(self):
         self._logger.log(Phase.COMPLETE)
         self._is_completed = True
-        print(self._result)
         self.dispatch_event(AlgorithmEvent(EventType.MAZE_GENERATION_COMPLETED, None))
 
     def get_finished_maze(self):
@@ -68,9 +67,18 @@ class MazeGenerator(Publisher):
         self._observers.remove(observer)
 
     def dispatch_event(self, event: AlgorithmEvent):
+        if event.algorithm_event_type == EventType.MAZE_GENERATION_COMPLETED:
+            event = AlgorithmEvent(EventType.MAZE_GENERATION_COMPLETED, self._result)
+            for observer in self._observers:
+                observer.on_event(event)
+            return
         if not self._with_event_dispatching:
             return
         # Note: Wait for a little while so that the events enter the queue in the right order.
         time.sleep(0.001)
         for observer in self._observers:
             observer.on_event(event)
+
+    def _check_parameters(self):
+        if self._parameters.maze_type == MazeType.MULTIPLE:
+            self._logger.log_multiple_solutions_not_implemented()

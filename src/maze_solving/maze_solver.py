@@ -3,6 +3,10 @@ import copy
 from src.events.event import AlgorithmEvent, EventType
 from src.events.observer import Observer
 from src.events.publisher import Publisher
+
+
+from src.maze_solving.dead_end_filler import DeadEndFiller
+from src.maze_solving.dijkstra import Dijkstra
 from src.maze_solving.wall_follower import WallFollower
 
 
@@ -19,11 +23,22 @@ class MazeSolver(Publisher):
         self._is_completed = False
 
     def solve_with_wall_follower(self):
-        print("Solving with wall follower")
+        """Performs solving the maze using the Wall Follower algorithm."""
+        self._solve(WallFollower)
+
+    def solve_with_dead_end_filler(self):
+        """Performs solving the maze using the Dead End Filler algorithm."""
+        self._solve(DeadEndFiller)
+
+    def solve_with_dijkstra(self):
+        """Performs solving the maze using the Dijkstra algorithm."""
+        self._solve(Dijkstra)
+
+    def _solve(self, selected_solver):
+        print("SOLVE")
         maze_copy = self._copy_maze()
-        solver = WallFollower(maze_copy, self.dispatch_event)
+        solver = selected_solver(maze_copy, self.dispatch_event)
         solver.solve()
-        self.dispatch_event(AlgorithmEvent(EventType.SOLVING_COMPLETED, None))
 
     def _copy_maze(self):
         return copy.deepcopy(self.maze)
@@ -35,6 +50,7 @@ class MazeSolver(Publisher):
         self._observers.remove(observer)
 
     def dispatch_event(self, event: AlgorithmEvent):
+        print(f"DISPATCH {event.nodes}")
         # Note: Wait for a little while so that the events enter the queue in the right order.
         time.sleep(0.001)
         for observer in self._observers:

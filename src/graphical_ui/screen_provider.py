@@ -16,25 +16,26 @@ class ScreenProvider:
         screen.title(GAME_TITLE)
         screen.bgcolor(BACKGROUND_COLOR)
         screen.tracer(0)
-        self._screen = screen
+        self.screen = screen
 
     def update(self):
-        """Must be called after changes to maze elements to make them visible on the screen"""
-        self._screen.update()
+        """Must be called after changes to maze elements to make them visible on the screen."""
+        self.screen.update()
 
-    def add_keystroke_action(self, action, key):
-        self._screen.onkey(action, key)
-        # turtle.listen()  # pylint: disable=no-member
-
-    def listen_to_keystrokes(self):
+    def add_on_keystroke_actions(self, actions):
+        """Sets up listening to several keystrokes to invoke actions."""
+        for action, key in actions:
+            self.screen.onkey(action, key)
         turtle.listen()  # pylint: disable=no-member
 
     def set_exit_on_click(self):
-        """Prevents the screen from closing prematurely"""
-        self._screen.exitonclick()
+        """Prevents the screen from closing prematurely."""
+        self.screen.exitonclick()
 
     def on_timer(self, action, delay):
-        self._screen.ontimer(action, delay)
+        """Sets up a timer to perform an action on screen after a delay."""
+        self.screen.ontimer(action, delay)
 
     def quit_program(self):
-        turtle.bye()
+        """Closes the UI screen."""
+        turtle.bye()  # pylint: disable=no-member

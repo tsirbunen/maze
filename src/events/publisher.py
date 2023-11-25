@@ -5,14 +5,16 @@ from .event import AlgorithmEvent
 
 
 class Publisher(ABC):
+    """Publisher interface for a publisher that publishes maze algorithm-related events."""
+
     @abstractmethod
     def attach_observer(self, observer: Observer):
-        pass
+        """Attaches an observer to the publisher."""
 
     @abstractmethod
     def detach_observer(self, observer: Observer):
-        pass
+        """Detaches an observer from the publisher."""
 
     @abstractmethod
     def dispatch_event(self, event: AlgorithmEvent):
-        pass
+        """Dispatches an event to all observers."""

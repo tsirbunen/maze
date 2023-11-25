@@ -46,12 +46,13 @@ class MazeWalls:
             return Wall(Point(x, y - ELEMENT_SIZE), 180)
         return None
 
-    def remove_wall_between_nodes_with_a_blink(self, nodes):
-        """Deletes a wall between two maze nodes on screen permanently with a blink effect."""
+    def remove_wall_between_nodes(self, nodes, with_blink=True):
+        """Deletes a wall between two maze nodes permanently with an optional blink effect."""
         [node, neighbor] = self._arrange_nodes_asc(nodes)
         position = self._get_position_on_node_of_wall_to_remove(node, neighbor)
         wall_to_remove = self._get_wall_to_remove(node, position)
-        self._blink_wall(wall_to_remove)
+        if with_blink:
+            self._blink_wall(wall_to_remove)
         self._update_walls_of_all_nodes(node, position)
         self._clear_wall_from_screen(wall_to_remove)
         self._update_screen()

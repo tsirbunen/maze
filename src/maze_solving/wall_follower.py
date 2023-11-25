@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import math
 from enum import Enum
+import time
 
 from src.events.event import AlgorithmEvent, EventType
 
@@ -56,6 +57,7 @@ class WallFollower:
         self._dispatch_event = dispatch_event
         self.current_node = self.row = self.column = 0
         self.facing = Side.RIGHT
+        self.children = [None for _ in range(self.size * self.size)]
 
     def solve(self):
         """Performs solving the maze using the wall follower algorithm."""
@@ -65,9 +67,13 @@ class WallFollower:
             for turn in self._get_turns_to_make():
                 turn()
                 if self._can_go_forward():
+                    node_in_front = self._get_node_in_front()
+                    self.children[self.current_node] = node_in_front
                     self._go_forward()
                     self._dispatch_current_node()
                     break
+        self._dispatch_path()
+        self._dispatch_event(AlgorithmEvent(EventType.SOLVING_COMPLETED, None))
 
     def _dispatch_current_node(self):
         self._dispatch_event(
@@ -104,3 +110,18 @@ class WallFollower:
 
     def _changes_if_going_forward(self):
         return ROW_AND_COLUMN_CHANGE_TO_GO_FORWARD[self.facing]
+
+    def _dispatch_path(self):
+        path = self._extract_path()
+        for node in path:
+            self._dispatch_event(AlgorithmEvent(EventType.PATH_NODE, [node]))
+            time.sleep(0.001)
+        time.sleep(1)
+
+    def _extract_path(self):
+        path = [0]
+        index = 0
+        while index != self.size * self.size - 1:
+            index = self.children[index]
+            path.append(index)
+        return path

@@ -2,6 +2,8 @@ import random
 
 
 class BasicMazeOperations:
+    """Holds operations common to all maze generation phases' algorithms."""
+
     def __init__(self, size):
         self.size = size
 

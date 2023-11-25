@@ -2,8 +2,7 @@ import threading
 import time
 from src.events.event import EventType
 from src.events.event_queue import EventQueue
-from src.graphical_ui.maze_walls import MazeWalls
-from src.graphical_ui.status_stamps import StatusStamps
+from src.graphical_ui.stamp_activity import StampActivity
 
 
 def threaded(fn):
@@ -20,29 +19,33 @@ def threaded(fn):
 class EventsProcessor:
     """Uses events produced by maze algorithms to show their progress on the screen."""
 
+    _sleep_time = 2
+    _should_stop_processing = False
+    _temporary_nodes = []
+    _with_live_viewing = True
+
     def __init__(
         self,
         queue: EventQueue,
-        stamps: StatusStamps,
-        walls: MazeWalls,
-        move_on_to_next_step,
+        handle_stamp_action_fn,
+        remove_wall_fn,
+        perform_next_step,
     ):
-        self._sleep_time = 2
         self._queue = queue
-        self.stamps = stamps
-        self.walls = walls
-        self.temporary_nodes = []
-        self.should_stop_processing = False
+        self._handle_stamp_action = handle_stamp_action_fn
+        self._remove_wall = remove_wall_fn
         self.available_actions = {
-            EventType.MAZE_GENERATION_COMPLETED: self._maze_completed,
+            EventType.MAZE_GENERATION_COMPLETED: self._on_maze_completed,
             EventType.PHASE_COMPLETED: self._hide_all_stamps,
             EventType.PERMANENT_NODE: self._show_stamps,
-            EventType.REMOVE_WALL: self.remove_wall,
+            EventType.REMOVE_WALL: self._remove_wall,
             EventType.TEMPORARY_ROOT: self._set_temporary_root_node,
             EventType.TEMPORARY_NEIGHBOR: self._add_temporary_neighbor_node,
-            EventType.SOLVING_COMPLETED: self._solving_completed,
+            EventType.SOLVING_COMPLETED: self.stop_processing,
+            EventType.PATH_NODE: self._show_path_node,
+            EventType.BLINK_NODE: self._blink_node,
         }
-        self.move_on_to_next_step = move_on_to_next_step
+        self.perform_next_step = perform_next_step
 
     def lower_speed(self):
         """Slows down the speed with which the processor moves on to show the next event."""
@@ -52,53 +55,22 @@ class EventsProcessor:
         """Speeds up the speed with which the processor moves on to show the next event."""
         self._sleep_time /= 2
 
-    def stop_processing(self):
+    def stop_processing(self, _=None):
         """Stops showing progress live on the screen."""
-        self.should_stop_processing = True
-        self.stamps.hide_all()
-        self.move_on_to_next_step()
+        self._should_stop_processing = True
+        self._handle_stamp_action(StampActivity.HIDE_ALL, None)
 
-    def _hide_all_stamps(self, _):
-        self.stamps.hide_all()
-
-    def _show_stamps(self, nodes):
-        for node in nodes:
-            self.stamps.show_stamp(node)
-
-    def _hide_stamps(self, nodes):
-        for node in nodes:
-            self.stamps.hide_stamp(node)
-
-    def remove_wall(self, nodes):
-        self.walls.remove_wall_between_nodes_with_a_blink(nodes)
-
-    def _set_temporary_root_node(self, nodes):
-        self._hide_earlier_temporary_nodes()
-        self.temporary_nodes = [nodes[0]]
-        self.stamps.show_stamp(nodes[0])
-
-    def _hide_earlier_temporary_nodes(self):
-        while len(self.temporary_nodes) > 0:
-            node = self.temporary_nodes.pop()
-            self.stamps.hide_stamp(node)
-
-    def _add_temporary_neighbor_node(self, nodes):
-        self.temporary_nodes.append(nodes[0])
-        self.stamps.show_stamp(nodes[0])
-
-    def _maze_completed(self, _):
-        self._set_should_stop(None)
-
-    def _solving_completed(self, _):
-        self._hide_all_stamps(None)
-
-    def _set_should_stop(self, _):
-        self.should_stop_processing = True
+    def hide_live_viewing(self):
+        """Control whether the processor shows progress live on the screen."""
+        self._with_live_viewing = False
 
     @threaded
     def process(self):
-        """Processes maze algorithm events in the queue."""
-        while not self.should_stop_processing:
+        """Translates maze algorithm events into animations on the screen."""
+        # print("\033[95mProcess events...")
+        if self._should_stop_processing:
+            self._should_stop_processing = False
+        while not self._should_stop_processing:
             print("\033[95mCheck for new events...")
             time.sleep(self._sleep_time)
             if not self._queue.is_empty():
@@ -107,3 +79,48 @@ class EventsProcessor:
                 action = self.available_actions[event.algorithm_event_type]
                 action(event.nodes)
         self.stop_processing()
+
+    def _hide_all_stamps(self, _):
+        self._handle_stamp_action(StampActivity.HIDE_ALL, None)
+
+    def _show_stamps(self, nodes):
+        for node in nodes:
+            self._handle_stamp_action(StampActivity.SHOW_STAMP, node)
+
+    def _hide_stamps(self, nodes):
+        for node in nodes:
+            self._handle_stamp_action(StampActivity.HIDE_STAMP, node)
+
+    def _set_temporary_root_node(self, nodes):
+        self._hide_earlier__temporary_nodes()
+        self._temporary_nodes = [nodes[0]]
+        self._handle_stamp_action(StampActivity.SHOW_STAMP, nodes[0])
+
+    def _hide_earlier__temporary_nodes(self):
+        while len(self._temporary_nodes) > 0:
+            node = self._temporary_nodes.pop()
+            self._handle_stamp_action(StampActivity.HIDE_STAMP, node)
+
+    def _add_temporary_neighbor_node(self, nodes):
+        self._temporary_nodes.append(nodes[0])
+        self._handle_stamp_action(StampActivity.SHOW_STAMP, nodes[0])
+
+    def _show_path_node(self, nodes):
+        self._handle_stamp_action(StampActivity.SHOW_PATH_STAMP, nodes[0])
+
+    def _blink_node(self, nodes):
+        self._handle_stamp_action(StampActivity.BLINK_STAMP, nodes[0])
+        self._handle_stamp_action(StampActivity.SHOW_STAMP, nodes[0])
+
+    def _on_maze_completed(self, maze_connections):
+        if self._with_live_viewing:
+            self._should_stop_processing = True
+        else:
+            self._remove_maze_walls(maze_connections)
+            self._with_live_viewing = True
+        self.perform_next_step(maze_connections)
+
+    def _remove_maze_walls(self, maze_connections):
+        for index, connections_of_a_node in enumerate(maze_connections):
+            for neighbor in connections_of_a_node:
+                self._remove_wall([index, neighbor], False)
