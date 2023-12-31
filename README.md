@@ -4,6 +4,10 @@
 solves the mazes using different algorithms. Optionally you can choose to view the
 maze generation and solving processes live in a GUI.
 
+**CLICK THE IMAGE BELOW TO VIEW THE MAZE IN ACTION AT YOUTUBE!!!**
+
+[![Demo](/images/maze.png)](https://youtu.be/y9F6p5_Q7lU)
+
 ## RUNNING THE PROGRAM
 
 In root folder, run
